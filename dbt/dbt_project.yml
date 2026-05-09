@@ -1,0 +1,18 @@
+name: atlas_insight
+version: 1.0.0
+config-version: 2
+
+profile: atlas_insight
+
+model-paths: ["models"]
+target-path: target
+clean-targets:
+  - target
+  - dbt_packages
+
+models:
+  atlas_insight:
+    silver:
+      +materialized: table
+    gold:
+      +materialized: table

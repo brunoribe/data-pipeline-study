@@ -1,0 +1,5 @@
+type: explore
+display_name: Atlas Source Overview
+metrics_view: gold_source_overview_metrics
+dimensions: "*"
+measures: "*"

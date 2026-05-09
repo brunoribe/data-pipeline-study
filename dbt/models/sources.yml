@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: ops
+    schema: main
+    tables:
+      - name: bronze_ingestion_audit
+        description: Append-only audit trail emitted by the Dagster bronze ingestion asset.
+
+models:
+  - name: silver_ingestion_audit
+    description: Latest-record view of source ingestions with recency metadata.
+    columns:
+      - name: run_id
+        tests:
+          - not_null
+      - name: extracted_at
+        tests:
+          - not_null
+      - name: source_database
+        tests:
+          - not_null
+      - name: source_table
+        tests:
+          - not_null
+  - name: gold_source_overview
+    description: Starter gold mart that summarizes the latest extracted tables and row counts by source system.

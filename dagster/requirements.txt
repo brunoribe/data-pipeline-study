@@ -1,0 +1,7 @@
+dagster
+dagster-webserver
+dagster-postgres
+dagster-dbt
+dbt-duckdb
+duckdb
+boto3

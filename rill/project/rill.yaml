@@ -1,0 +1,3 @@
+display_name: Atlas Insight Local Analytics
+description: Local proof-of-concept analytics workspace for Atlas Insight Partners.
+olap_connector: duckdb

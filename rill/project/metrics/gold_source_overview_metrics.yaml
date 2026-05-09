@@ -1,0 +1,19 @@
+version: 1
+type: metrics_view
+model: gold_source_overview
+timeseries: snapshot_at
+
+dimensions:
+  - name: source_database
+    column: source_database
+
+measures:
+  - name: total_rows
+    label: Total Rows
+    expression: sum(total_rows)
+  - name: table_count
+    label: Table Count
+    expression: sum(table_count)
+  - name: source_records
+    label: Source Records
+    expression: count(*)
