@@ -6,6 +6,18 @@ atlas_insight:
       path: "{{ env_var('DBT_DUCKDB_PATH', '/opt/project/storage/warehouse/analytics.duckdb') }}"
       schema: main
       threads: 4
+      extensions:
+        - httpfs
+        - parquet
+      external_root: "s3://{{ env_var('MINIO_SILVER_BUCKET', env_var('MINIO_BUCKET', 'atlas-bronze')) }}/silver"
+      secrets:
+        - type: s3
+          key_id: "{{ env_var('AWS_ACCESS_KEY_ID', 'minio') }}"
+          secret: "{{ env_var('AWS_SECRET_ACCESS_KEY', 'minio12345') }}"
+          region: "{{ env_var('AWS_REGION', 'us-east-1') }}"
+          endpoint: "{{ env_var('MINIO_ENDPOINT', 'http://minio:9000') | replace('http://', '') | replace('https://', '') }}"
+          url_style: path
+          use_ssl: false
 
     motherduck:
       type: duckdb

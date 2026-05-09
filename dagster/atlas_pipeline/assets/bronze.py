@@ -27,10 +27,20 @@ def _escape_sql_string(value: str) -> str:
     return value.replace("'", "''")
 
 
-def _ensure_bucket(s3_client) -> None:
+def build_s3_client():
+    return boto3.client(
+        "s3",
+        endpoint_url=MINIO_ENDPOINT,
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_REGION,
+    )
+
+
+def ensure_bucket(s3_client, bucket_name: str) -> None:
     buckets = {bucket["Name"] for bucket in s3_client.list_buckets().get("Buckets", [])}
-    if MINIO_BUCKET not in buckets:
-        s3_client.create_bucket(Bucket=MINIO_BUCKET)
+    if bucket_name not in buckets:
+        s3_client.create_bucket(Bucket=bucket_name)
 
 
 @asset(group_name="bronze", compute_kind="python")
@@ -39,14 +49,8 @@ def bronze_ingestion(context) -> MaterializeResult:
     if not dataset_files:
         raise Failure(f"No DuckDB source files were found in {DATASETS_DIR}")
 
-    s3_client = boto3.client(
-        "s3",
-        endpoint_url=MINIO_ENDPOINT,
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        region_name=AWS_REGION,
-    )
-    _ensure_bucket(s3_client)
+    s3_client = build_s3_client()
+    ensure_bucket(s3_client, MINIO_BUCKET)
 
     WAREHOUSE_DIR.mkdir(parents=True, exist_ok=True)
 

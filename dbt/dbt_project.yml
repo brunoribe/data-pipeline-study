@@ -10,9 +10,13 @@ clean-targets:
   - target
   - dbt_packages
 
+on-run-start:
+  - "{{ register_upstream_external_models() }}"
+
 models:
   atlas_insight:
     silver:
-      +materialized: table
+      +materialized: external
+      +format: parquet
     gold:
       +materialized: table
