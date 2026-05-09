@@ -1,0 +1,163 @@
+version: 2
+
+models:
+  - name: silver_ingestion_audit
+    description: Latest-record view of source ingestions with recency metadata.
+    columns:
+      - name: run_id
+        tests:
+          - not_null
+      - name: extracted_at
+        tests:
+          - not_null
+      - name: source_database
+        tests:
+          - not_null
+      - name: source_table
+        tests:
+          - not_null
+
+  - name: silver_crm_consent_preferences
+    description: Curated CRM consent preferences with a single current preference row per customer.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_crm_customers
+    description: Curated CRM customer dimension with normalized marketing attributes.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_crm_customer_segments
+    description: Curated CRM customer segment assignments keyed by segment identifier.
+    columns:
+      - name: segment_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests:
+          - not_null
+
+  - name: silver_financial_accounts
+    description: Curated financial account dimension with masked card attributes and normalized balances.
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests:
+          - not_null
+
+  - name: silver_financial_card_transactions
+    description: Curated financial card transactions with normalized geography and transaction states.
+    columns:
+      - name: transaction_id
+        tests:
+          - not_null
+          - unique
+      - name: account_id
+        tests:
+          - not_null
+
+  - name: silver_financial_customer_change_log
+    description: Curated financial customer change log with hashed payload snapshots.
+    columns:
+      - name: change_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_financial_customers
+    description: Curated financial customer dimension with deterministic deduplication and masked PII fields.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_financial_merchants
+    description: Curated merchant dimension with normalized merchant geography and risk classification.
+    columns:
+      - name: merchant_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_healthcare_diagnoses
+    description: Curated diagnosis dimension with normalized severity and chronic disease flags.
+    columns:
+      - name: diagnosis_code
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_healthcare_medical_visits
+    description: Curated medical visit fact with normalized claim metrics and care outcomes.
+    columns:
+      - name: visit_id
+        tests:
+          - not_null
+          - unique
+      - name: patient_id
+        tests:
+          - not_null
+
+  - name: silver_healthcare_patient_change_log
+    description: Curated patient change log with hashed payload snapshots.
+    columns:
+      - name: change_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_healthcare_patients
+    description: Curated patient dimension with masked PII and normalized risk attributes.
+    columns:
+      - name: patient_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_healthcare_providers
+    description: Curated provider dimension with normalized location and network attributes.
+    columns:
+      - name: provider_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_markets_stock_prices
+    description: Curated daily stock prices with normalized ticker casing and derived range metrics.
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: trading_date
+        tests:
+          - not_null
+
+  - name: silver_markets_ticker_change_log
+    description: Curated ticker change log with hashed payload snapshots.
+    columns:
+      - name: change_id
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_markets_tickers
+    description: Curated ticker dimension with normalized market classification attributes.
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+          - unique
+
+  - name: gold_source_overview
+    description: Gold summary mart that rolls up curated silver row counts by source domain.

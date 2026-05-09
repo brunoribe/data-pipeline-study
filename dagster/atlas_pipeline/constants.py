@@ -16,6 +16,7 @@ RILL_DATA_DIR = PROJECT_ROOT / "rill" / "project" / "data"
 
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "http://minio:9000")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "atlas-bronze")
+MINIO_SILVER_BUCKET = os.getenv("MINIO_SILVER_BUCKET", MINIO_BUCKET)
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", os.getenv("MINIO_ROOT_USER", "minio"))
 AWS_SECRET_ACCESS_KEY = os.getenv(
