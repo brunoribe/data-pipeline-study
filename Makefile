@@ -1,6 +1,8 @@
 COMPOSE=docker compose
+PYTHON ?= python
+DATASET_ARGS ?=
 
-.PHONY: build up down destroy restart logs ps validate bootstrap dagster-shell
+.PHONY: build up down destroy restart logs ps validate bootstrap dagster-shell generate-datasets
 
 build:
 	$(COMPOSE) build
@@ -32,3 +34,6 @@ bootstrap:
 
 dagster-shell:
 	$(COMPOSE) exec dagster sh
+
+generate-datasets:
+	$(PYTHON) scripts/run_generate_practice_datasets.py $(DATASET_ARGS)

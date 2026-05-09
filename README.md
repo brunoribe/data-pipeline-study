@@ -18,6 +18,7 @@ This repository scaffolds a local proof-of-concept analytics platform for Atlas 
 ├── dagster/
 ├── dbt/
 ├── rill/
+├── scripts/
 ├── storage/
 ├── docker-compose.yml
 └── Makefile
@@ -27,6 +28,38 @@ This repository scaffolds a local proof-of-concept analytics platform for Atlas 
 
 - Docker Desktop with Compose enabled.
 - GNU Make if you want to use the `Makefile` targets. If you do not have `make` on Windows, run the equivalent `docker compose` commands shown below.
+- Python 3.10+ if you want to generate local sample DuckDB inputs with the helper script in `scripts/`.
+
+## Generate sample datasets
+
+The project ingests every `.duckdb` file under `datasets/`. To create a fresh set of sample source files, use the helper launcher in `scripts/`.
+
+The launcher creates and reuses a dedicated virtual environment at `scripts/.venv`, installs `scripts/requirements.txt`, and then runs the generator. By default it writes these files into `datasets/`:
+
+- `financial.duckdb`
+- `healthcare.duckdb`
+- `markets.duckdb`
+- `crm.duckdb`
+
+### Generate With `make`
+
+```bash
+make generate-datasets
+make generate-datasets DATASET_ARGS="--profile small --seed 7"
+```
+
+If your Python command is not `python`, override it when you invoke `make`, for example `make PYTHON="py -3.13" generate-datasets`.
+
+### Generate Without `make`
+
+```bash
+python scripts/run_generate_practice_datasets.py
+python scripts/run_generate_practice_datasets.py --profile small --seed 7
+```
+
+Use `--output-dir` if you need the files somewhere other than `datasets/`, and pass `--refresh-venv` to force a reinstall when `scripts/requirements.txt` changes.
+
+After generating new inputs, rerun the bootstrap job so Dagster ingests the new DuckDB files from `datasets/`.
 
 ## Quick start
 
@@ -53,10 +86,10 @@ docker compose exec -T dagster dagster job execute -m atlas_pipeline.definitions
 
 ## Service URLs
 
-- Dagster: http://localhost:3000
-- MinIO API: http://localhost:9000
-- MinIO Console: http://localhost:9001
-- Rill: http://localhost:9009
+- Dagster: <http://localhost:3000>
+- MinIO API: <http://localhost:9000>
+- MinIO Console: <http://localhost:9001>
+- Rill: <http://localhost:9009>
 
 ## Useful commands
 
